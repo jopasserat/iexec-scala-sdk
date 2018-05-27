@@ -119,12 +119,16 @@ resolvers ++= Seq(
 
 lazy val web3jScalaVersion = "0.2.2"
 lazy val web3jScala = "com.micronautics" %% "web3j-scala" % web3jScalaVersion withSources()
-
-lazy val demo = Project(id = "demo", base = file("demo")) settings(defaultSettings: _*) settings(
+lazy val web3jScalaSettings = Seq(
   unmanagedSourceDirectories in Compile += baseDirectory.value / "src/main/resources/abiWrapper",
   libraryDependencies += web3jScala,
   resolvers += "micronautics/scala on bintray" at "http://dl.bintray.com/micronautics/scala"
 )
+
+
+lazy val sdk = Project(id = "sdk", base = file("sdk")) settings(defaultSettings ++ web3jScalaSettings : _*)
+
+lazy val demo = Project(id = "demo", base = file("demo")) settings(defaultSettings ++ web3jScalaSettings : _*) dependsOn sdk
 
 logLevel := Level.Warn
 
@@ -145,4 +149,3 @@ initialCommands in console := """import java.math.BigInteger
 
 cancelable := true
 fork in Test := true
-
