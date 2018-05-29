@@ -112,7 +112,7 @@ javacOptions ++= Seq(
   "-g:vars"
 )
 
-resolvers ++= Seq(
+lazy val ethResolvers = Seq(
   "Ethereum Maven" at "https://dl.bintray.com/ethereum/maven/",
   "micronautics/scala on bintray" at "http://dl.bintray.com/micronautics/scala"
 )
@@ -122,7 +122,7 @@ lazy val web3jScala = "com.micronautics" %% "web3j-scala" % web3jScalaVersion wi
 lazy val web3jScalaSettings = Seq(
   unmanagedSourceDirectories in Compile += baseDirectory.value / "src/main/resources/abiWrapper",
   libraryDependencies += web3jScala,
-  resolvers += "micronautics/scala on bintray" at "http://dl.bintray.com/micronautics/scala"
+  resolvers ++= ethResolvers
 )
 
 
