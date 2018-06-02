@@ -56,6 +56,7 @@ object DemoIExec extends App {
     val dappPrice = oracle.getDappPrice(factorial.getContractAddress).send()
     val allowance = rlcContract.allowance(credentials.getAddress, escrowAddress.value).send()
 
+    println("Current RLC balance: " + showRlcBalance(rlcContract, userWallet.address))
     println("Current account allowance: " + showAllowance(rlcContract, userWallet.address, escrowAddress))
 
     val txReceipt = allow(web3, userWallet, credentials, rlcContract, escrowAddress)(3)
