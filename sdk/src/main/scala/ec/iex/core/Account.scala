@@ -49,6 +49,13 @@ object Account {
     unsignedTx
   }
 
+  def showAllowance(rlcContract: RLC, walletAddress: Address, escrowAddress: Address) = {
+    // get current allowance from wallet address to escrow address
+    val unsignedTx = rlcContract.allowance(walletAddress.value, escrowAddress.value).send()
+
+    unsignedTx
+  }
+
   def loadWallet(walletFilepath: String, password: String) = {
 
     val credentials: Credentials = WalletUtils.loadCredentials(password, walletFilepath)
