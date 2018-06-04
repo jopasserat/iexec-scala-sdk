@@ -54,13 +54,11 @@ object DemoIExec extends App {
     // FIXME all these call are synchronous at the moment
     val callbackPrice = oracle.callbackPrice().send()
     val dappPrice = oracle.getDappPrice(factorial.getContractAddress).send()
-    val allowance = rlcContract.allowance(credentials.getAddress, escrowAddress.value).send()
 
-    println("Current RLC balance: " + showRlcBalance(rlcContract, userWallet.address))
-    println("Current account allowance: " + showAllowance(rlcContract, userWallet.address, escrowAddress))
+    showRlcBalance(rlcContract, userWallet.address)
+    showAllowance(rlcContract, userWallet.address, escrowAddress)
 
     val txReceipt = allow(web3, userWallet, credentials, rlcContract, escrowAddress)(3)
-    
     //    for (txReceipt ← futureTxReceipt) {
     println(io.format(txReceipt))
     println(s"View on etherscan: https://ropsten.etherscan.io/tx/${txReceipt.getTransactionHash}")

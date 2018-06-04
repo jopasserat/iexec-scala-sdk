@@ -51,12 +51,12 @@ object Account {
 
   def showRlcBalance(rlcContract: RLC, walletAddress: Address) = {
     // get RLC balance of wallet
-    rlcContract.balanceOf(walletAddress.value).send()
+    println("RLC balance: " + rlcContract.balanceOf(walletAddress.value).send())
   }
 
   def showAllowance(rlcContract: RLC, walletAddress: Address, escrowAddress: Address) = {
     // get current allowance from wallet address to escrow address
-    rlcContract.allowance(walletAddress.value, escrowAddress.value).send()
+    println("Account allowance: " + rlcContract.allowance(walletAddress.value, escrowAddress.value).send())
   }
 
   def loadWallet(walletFilepath: String, password: String) = {
