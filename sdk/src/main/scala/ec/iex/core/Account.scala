@@ -54,9 +54,10 @@ object Account {
     println("RLC balance: " + rlcContract.balanceOf(walletAddress.value).send())
   }
 
-  def showAllowance(rlcContract: RLC, walletAddress: Address, escrowAddress: Address) = {
-    // get current allowance from wallet address to escrow address
-    println("Account allowance: " + rlcContract.allowance(walletAddress.value, escrowAddress.value).send())
+  def showHubBalances(iexecHubContract: IexecHub, walletAddress: Address) = {
+    // get staked and locked balances on iexec hub
+    val stakedAndLockedBalances = iexecHubContract.checkBalance(walletAddress.value).send()
+    println("Balance staked: " + stakedAndLockedBalances.getValue1 + "\n" + "Balance locked: " + stakedAndLockedBalances.getValue2)
   }
 
   def loadWallet(walletFilepath: String, password: String) = {
@@ -76,8 +77,14 @@ object Account {
     val web3j = web3.web3j
 
     val appHubAddress = AppHub.getPreviouslyDeployedAddress(KOVAN_ID)
+    val rlcAddress = RLC.getPreviouslyDeployedAddress(KOVAN_ID)
+    val iexecHubAddress = IexecHub.getPreviouslyDeployedAddress(KOVAN_ID)
 
-    AppHub.load(appHubAddress, web3j, credentials, gasPrice, gasLimit)
+    val appHub = AppHub.load(appHubAddress, web3j, credentials, gasPrice, gasLimit)
+    val rlc  = RLC.load(rlcAddress, web3j, credentials, gasPrice, gasLimit)
+    val iexecHub = IexecHub.load(iexecHubAddress, web3j, credentials, gasPrice, gasLimit)
+
+    (appHub, rlc, iexecHub)
   }
 
 }

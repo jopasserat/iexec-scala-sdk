@@ -50,11 +50,12 @@ object DemoIExec {
       val gasLimit = Ether.fromWei(452250)
 
 
-      val appHub = loadContracts(web3, credentials)(gasPrice.bigInteger, gasLimit.bigInteger)
+      val (appHub, rlc, iexecHub) = loadContracts(web3, credentials)(gasPrice.bigInteger, gasLimit.bigInteger)
 
       val factorialAddress = appHub.getApp(userWallet.address.value, BigInteger.valueOf(3)).send()
 
-      println("factorialAddress: " + factorialAddress)
+      showRlcBalance(rlc, userWallet.address)
+      showHubBalances(iexecHub, userWallet.address)
 
     } catch {
       case e: Throwable ⇒
