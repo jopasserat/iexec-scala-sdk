@@ -47,21 +47,32 @@ object DemoIExec {
       val web3 = web3JScala.sync // CAREFUL!! impactful choice with all subsequent calls going through this proxy being synchronous!
 
       val gasPrice = web3.gasPrice.asWei
-      val gasLimit = Ether.fromWei(452250)
-
+      //val gasLimit = Ether.fromWei(452250)
+      val gasLimit = Ether.fromWei(1000000)
 
       val (appHub, rlc, iexecHub) = loadContracts(web3, credentials)(gasPrice.bigInteger, gasLimit.bigInteger)
-
-      val factorialAddress = appHub.getApp(userWallet.address.value, BigInteger.valueOf(3)).send()
 
       showRlcBalance(rlc, userWallet)
       showRlcAllowance(rlc, iexecHub, userWallet)
       showHubBalances(iexecHub, userWallet)
 
-      allow(web3, userWallet, credentials, rlc, Address(iexecHub.getContractAddress))(10)
-      depositToHub(iexecHub, 10)
+      val factorialAddress = appHub.getApp(userWallet.address.value, BigInteger.valueOf(3)).send()
+      val factorialApp = App.load(factorialAddress, web3.web3j, credentials, gasPrice.bigInteger, gasLimit.bigInteger)
+      val appPrice = factorialApp.m_appPrice().send()
 
-      withdrawFromHub(iexecHub, 10)
+      allow(web3, userWallet, credentials, rlc, Address(iexecHub.getContractAddress))(appPrice.intValue())
+      depositToHub(iexecHub, appPrice.intValue())
+
+      val workerPoolId = 245
+      val workPoolAddress = "0x851f65b27030ac9634bf514ffbc3c1369ed747e9"
+
+      val txHash = iexecHub.buyForWorkOrder(BigInteger.valueOf(workerPoolId), workPoolAddress, factorialAddress, "0", "10", userWallet.address.value, userWallet.address.value).send()
+
+      println(txHash)
+
+      val workId = txHash.getLogs().get(1).getTopics().get(1).replace("0x", "").replaceFirst("^0+(?!$)", "")
+
+      println("workId: " + workId)
 
     } catch {
       case e: Throwable ⇒
