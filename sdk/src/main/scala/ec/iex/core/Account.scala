@@ -49,15 +49,31 @@ object Account {
     unsignedTx
   }
 
-  def showRlcBalance(rlcContract: RLC, walletAddress: Address) = {
+  def showRlcBalance(rlcContract: RLC, wallet: UserWallet) = {
     // get RLC balance of wallet
-    println("RLC balance: " + rlcContract.balanceOf(walletAddress.value).send())
+    println("RLC balance: " + rlcContract.balanceOf(wallet.address.value).send())
   }
 
-  def showHubBalances(iexecHubContract: IexecHub, walletAddress: Address) = {
+  def showRlcAllowance(rlcContract: RLC, iexecHubContract: IexecHub, wallet: UserWallet) = {
+    // get RLC balance of wallet
+    println("RLC allowance: " + rlcContract.allowance(wallet.address.value, iexecHubContract.getContractAddress).send())
+  }
+
+
+  def showHubBalances(iexecHubContract: IexecHub, wallet: UserWallet) = {
     // get staked and locked balances on iexec hub
-    val stakedAndLockedBalances = iexecHubContract.checkBalance(walletAddress.value).send()
+    val stakedAndLockedBalances = iexecHubContract.checkBalance(wallet.address.value).send()
     println("Balance staked: " + stakedAndLockedBalances.getValue1 + "\n" + "Balance locked: " + stakedAndLockedBalances.getValue2)
+  }
+
+  def withdrawFromHub(iexecHubContract: IexecHub, amount: Int) = {
+    // withdraw amount from iexec hub
+    iexecHubContract.withdraw(amount).send()
+  }
+
+  def depositToHub(iexecHubContract: IexecHub, amount: Int) = {
+    // deposit amount to iexec hub
+    iexecHubContract.deposit(amount).send()
   }
 
   def loadWallet(walletFilepath: String, password: String) = {

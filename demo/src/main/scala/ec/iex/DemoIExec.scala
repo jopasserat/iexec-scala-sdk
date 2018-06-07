@@ -54,8 +54,14 @@ object DemoIExec {
 
       val factorialAddress = appHub.getApp(userWallet.address.value, BigInteger.valueOf(3)).send()
 
-      showRlcBalance(rlc, userWallet.address)
-      showHubBalances(iexecHub, userWallet.address)
+      showRlcBalance(rlc, userWallet)
+      showRlcAllowance(rlc, iexecHub, userWallet)
+      showHubBalances(iexecHub, userWallet)
+
+      allow(web3, userWallet, credentials, rlc, Address(iexecHub.getContractAddress))(10)
+      depositToHub(iexecHub, 10)
+
+      withdrawFromHub(iexecHub, 10)
 
     } catch {
       case e: Throwable ⇒
