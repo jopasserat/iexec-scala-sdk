@@ -32,15 +32,37 @@ import rx.functions.Func1;
  * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the 
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  *
- * <p>Generated with web3j version 3.3.1.
+ * <p>Generated with web3j version 3.4.0.
  */
 public class ERC20 extends Contract {
     private static final String BINARY = "0x";
 
+    public static final String FUNC_TOTALSUPPLY = "totalSupply";
+
+    public static final String FUNC_BALANCEOF = "balanceOf";
+
+    public static final String FUNC_ALLOWANCE = "allowance";
+
+    public static final String FUNC_TRANSFER = "transfer";
+
+    public static final String FUNC_TRANSFERFROM = "transferFrom";
+
+    public static final String FUNC_APPROVE = "approve";
+
+    public static final Event TRANSFER_EVENT = new Event("Transfer", 
+            Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}, new TypeReference<Address>() {}),
+            Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
+    ;
+
+    public static final Event APPROVAL_EVENT = new Event("Approval", 
+            Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}, new TypeReference<Address>() {}),
+            Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
+    ;
+
     protected static final HashMap<String, String> _addresses;
 
     static {
-        _addresses = new HashMap<>();
+        _addresses = new HashMap<String, String>();
     }
 
     protected ERC20(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
@@ -51,11 +73,15 @@ public class ERC20 extends Contract {
         super(BINARY, contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
-    public List<TransferEventResponse> getTransferEvents(TransactionReceipt transactionReceipt) {
-        final Event event = new Event("Transfer", 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}, new TypeReference<Address>() {}),
+    public RemoteCall<BigInteger> totalSupply() {
+        final Function function = new Function(FUNC_TOTALSUPPLY, 
+                Arrays.<Type>asList(), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
-        List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(event, transactionReceipt);
+        return executeRemoteCallSingleValueReturn(function, BigInteger.class);
+    }
+
+    public List<TransferEventResponse> getTransferEvents(TransactionReceipt transactionReceipt) {
+        List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(TRANSFER_EVENT, transactionReceipt);
         ArrayList<TransferEventResponse> responses = new ArrayList<TransferEventResponse>(valueList.size());
         for (Contract.EventValuesWithLog eventValues : valueList) {
             TransferEventResponse typedResponse = new TransferEventResponse();
@@ -68,16 +94,11 @@ public class ERC20 extends Contract {
         return responses;
     }
 
-    public Observable<TransferEventResponse> transferEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
-        final Event event = new Event("Transfer", 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}, new TypeReference<Address>() {}),
-                Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
-        EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
-        filter.addSingleTopic(EventEncoder.encode(event));
+    public Observable<TransferEventResponse> transferEventObservable(EthFilter filter) {
         return web3j.ethLogObservable(filter).map(new Func1<Log, TransferEventResponse>() {
             @Override
             public TransferEventResponse call(Log log) {
-                Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(event, log);
+                Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(TRANSFER_EVENT, log);
                 TransferEventResponse typedResponse = new TransferEventResponse();
                 typedResponse.log = log;
                 typedResponse.from = (String) eventValues.getIndexedValues().get(0).getValue();
@@ -88,11 +109,14 @@ public class ERC20 extends Contract {
         });
     }
 
+    public Observable<TransferEventResponse> transferEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+        EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
+        filter.addSingleTopic(EventEncoder.encode(TRANSFER_EVENT));
+        return transferEventObservable(filter);
+    }
+
     public List<ApprovalEventResponse> getApprovalEvents(TransactionReceipt transactionReceipt) {
-        final Event event = new Event("Approval", 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}, new TypeReference<Address>() {}),
-                Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
-        List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(event, transactionReceipt);
+        List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(APPROVAL_EVENT, transactionReceipt);
         ArrayList<ApprovalEventResponse> responses = new ArrayList<ApprovalEventResponse>(valueList.size());
         for (Contract.EventValuesWithLog eventValues : valueList) {
             ApprovalEventResponse typedResponse = new ApprovalEventResponse();
@@ -105,16 +129,11 @@ public class ERC20 extends Contract {
         return responses;
     }
 
-    public Observable<ApprovalEventResponse> approvalEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
-        final Event event = new Event("Approval", 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}, new TypeReference<Address>() {}),
-                Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
-        EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
-        filter.addSingleTopic(EventEncoder.encode(event));
+    public Observable<ApprovalEventResponse> approvalEventObservable(EthFilter filter) {
         return web3j.ethLogObservable(filter).map(new Func1<Log, ApprovalEventResponse>() {
             @Override
             public ApprovalEventResponse call(Log log) {
-                Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(event, log);
+                Contract.EventValuesWithLog eventValues = extractEventParametersWithLog(APPROVAL_EVENT, log);
                 ApprovalEventResponse typedResponse = new ApprovalEventResponse();
                 typedResponse.log = log;
                 typedResponse.owner = (String) eventValues.getIndexedValues().get(0).getValue();
@@ -125,22 +144,21 @@ public class ERC20 extends Contract {
         });
     }
 
-    public RemoteCall<BigInteger> totalSupply() {
-        final Function function = new Function("totalSupply", 
-                Arrays.<Type>asList(), 
-                Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
-        return executeRemoteCallSingleValueReturn(function, BigInteger.class);
+    public Observable<ApprovalEventResponse> approvalEventObservable(DefaultBlockParameter startBlock, DefaultBlockParameter endBlock) {
+        EthFilter filter = new EthFilter(startBlock, endBlock, getContractAddress());
+        filter.addSingleTopic(EventEncoder.encode(APPROVAL_EVENT));
+        return approvalEventObservable(filter);
     }
 
     public RemoteCall<BigInteger> balanceOf(String who) {
-        final Function function = new Function("balanceOf", 
+        final Function function = new Function(FUNC_BALANCEOF, 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(who)), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
         return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
 
     public RemoteCall<BigInteger> allowance(String owner, String spender) {
-        final Function function = new Function("allowance", 
+        final Function function = new Function(FUNC_ALLOWANCE, 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(owner), 
                 new org.web3j.abi.datatypes.Address(spender)), 
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
@@ -149,7 +167,7 @@ public class ERC20 extends Contract {
 
     public RemoteCall<TransactionReceipt> transfer(String to, BigInteger value) {
         final Function function = new Function(
-                "transfer", 
+                FUNC_TRANSFER, 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(to), 
                 new org.web3j.abi.datatypes.generated.Uint256(value)), 
                 Collections.<TypeReference<?>>emptyList());
@@ -158,7 +176,7 @@ public class ERC20 extends Contract {
 
     public RemoteCall<TransactionReceipt> transferFrom(String from, String to, BigInteger value) {
         final Function function = new Function(
-                "transferFrom", 
+                FUNC_TRANSFERFROM, 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(from), 
                 new org.web3j.abi.datatypes.Address(to), 
                 new org.web3j.abi.datatypes.generated.Uint256(value)), 
@@ -168,7 +186,7 @@ public class ERC20 extends Contract {
 
     public RemoteCall<TransactionReceipt> approve(String spender, BigInteger value) {
         final Function function = new Function(
-                "approve", 
+                FUNC_APPROVE, 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(spender), 
                 new org.web3j.abi.datatypes.generated.Uint256(value)), 
                 Collections.<TypeReference<?>>emptyList());

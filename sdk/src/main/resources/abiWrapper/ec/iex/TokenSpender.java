@@ -21,15 +21,17 @@ import org.web3j.tx.TransactionManager;
  * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the 
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  *
- * <p>Generated with web3j version 3.3.1.
+ * <p>Generated with web3j version 3.4.0.
  */
 public class TokenSpender extends Contract {
     private static final String BINARY = "0x";
 
+    public static final String FUNC_RECEIVEAPPROVAL = "receiveApproval";
+
     protected static final HashMap<String, String> _addresses;
 
     static {
-        _addresses = new HashMap<>();
+        _addresses = new HashMap<String, String>();
     }
 
     protected TokenSpender(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
@@ -42,7 +44,7 @@ public class TokenSpender extends Contract {
 
     public RemoteCall<TransactionReceipt> receiveApproval(String _from, BigInteger _value, String _token, byte[] _extraData) {
         final Function function = new Function(
-                "receiveApproval", 
+                FUNC_RECEIVEAPPROVAL, 
                 Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(_from), 
                 new org.web3j.abi.datatypes.generated.Uint256(_value), 
                 new org.web3j.abi.datatypes.Address(_token), 

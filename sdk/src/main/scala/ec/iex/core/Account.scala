@@ -69,22 +69,15 @@ object Account {
     (credentials, userWallet)
   }
 
-  lazy val ROPSTEN_ID = "3"
+  lazy val KOVAN_ID = "42"
 
   def loadContracts(web3: EthereumSynchronous, credentials: Credentials)(gasPrice: BigInteger, gasLimit: BigInteger) = {
 
     val web3j = web3.web3j
 
-    val factorialAddress = Factorial.getPreviouslyDeployedAddress(ROPSTEN_ID)
-    // TODO get from Wrapper as well
-    val rlcFaucetAddress = Address("0x7314dc4d7794b5e7894212ca1556ae8e3de58621")
-    val oracleAddress = "0x361a12b8caa96add52abcae37cdc28dfaba24f04"
+    val appHubAddress = AppHub.getPreviouslyDeployedAddress(KOVAN_ID)
 
-    val factorial = Factorial.load(factorialAddress, web3j, credentials, gasPrice, gasLimit)
-    val rlcFaucet = RLC.load(rlcFaucetAddress.value, web3j, credentials, gasPrice, gasLimit)
-    val oracle = IexecOracle.load(oracleAddress, web3j, credentials, gasPrice, gasLimit)
-
-    (oracle, rlcFaucet, factorial)
+    AppHub.load(appHubAddress, web3j, credentials, gasPrice, gasLimit)
   }
 
 }

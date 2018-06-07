@@ -15,15 +15,15 @@ import org.web3j.tx.TransactionManager;
  * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the 
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  *
- * <p>Generated with web3j version 3.3.1.
+ * <p>Generated with web3j version 3.4.0.
  */
 public class SafeMath extends Contract {
-    private static final String BINARY = "0x6080604052348015600f57600080fd5b50603580601d6000396000f3006080604052600080fd00a165627a7a72305820d9c6304273c16beacfe7cdbd14600af32077ed5fe8d18db605169c187f5784ad0029";
+    private static final String BINARY = "0x60606040523415600e57600080fd5b603580601b6000396000f3006060604052600080fd00a165627a7a7230582094729f095275c10ca688de89bcfcc6132fa4d245fd3705ccbd5840373b5ef8580029";
 
     protected static final HashMap<String, String> _addresses;
 
     static {
-        _addresses = new HashMap<>();
+        _addresses = new HashMap<String, String>();
     }
 
     protected SafeMath(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
