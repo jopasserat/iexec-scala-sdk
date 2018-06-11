@@ -30,7 +30,7 @@ object DemoIExec {
   //  import ec.iex._ // would need to include all the contracts wrapper if not in same package
 
   import ec.iex.core.Account._
-  import ec.iex.core.WorkOrder._
+  import ec.iex.core.Work._
 
   def main(args: Array[String]): Unit = {
 
@@ -38,10 +38,10 @@ object DemoIExec {
       // TODO how to get that from web3.accounts?
       val walletDir: String = Cmd.home(
         if (isWindows) s"${sys.props("user.home")}\\AppData\\Roaming\\Ethereum\\"
-        else if (isMac) "/Users/Karow/Library/Application Support/io.parity.ethereum/keys/kovan/"
+        else if (isMac) "/Users/Karow/Library/Application Support/io.parity.ethereum/keys/kovan/UTC--2018-06-06T17-46-09.866851332Z--2a20738dc9cf69271c806333fa84d0fa30087dd2.json"
         else "/home/foo/.ethereum/ropsten/keystore/wallet")
 
-    val (credentials, userWallet) = loadWallet(walletDir, "XXX")
+      val (credentials, userWallet) = loadWallet(walletDir, "kovan")
 
       val web3j: Web3j = Web3JScala.fromHttp() // defaults to http://localhost:8545/
       val web3JScala = new Web3JScala(web3j)
@@ -64,8 +64,8 @@ object DemoIExec {
       //allow(web3, userWallet, credentials, rlc, Address(iexecHub.getContractAddress))(appPrice.intValue())
       //depositToHub(iexecHub, appPrice.intValue())
 
-      val workerPoolId = 310 // pool ID
-      val workPoolAddress = "0x82190e18f7cE7CB9d39128707f58D19C649CF9C2" // pool address
+      val workerPoolId = 311 // pool ID
+      val workPoolAddress = "0x4899295937f3F7eEe4be1D2AD658788c6c9272B6" // pool address
       val params = "{\"cmdline\":\"10\"}" // dapp params
 
       val workId = buyWorkOrder(iexecHub, workerPoolId, workPoolAddress, factorialAddress, "0", params, userWallet.address.value, userWallet.address.value)
@@ -74,14 +74,14 @@ object DemoIExec {
 
       Thread.sleep(20000) // allow time for WorkOrder contract to be created
 
-      val workOrder = WorkOrder.load(workId, web3.web3j, credentials, gasPrice.bigInteger, gasLimit.bigInteger)
+      val workInfo = getWorkOrder(web3, workId, credentials, gasPrice.bigInteger, gasLimit.bigInteger)
 
-      println("requester: " + workOrder.m_requester().send())
-      println("workerpool: " + workOrder.m_workerpool().send())
-      println("status: " + workOrder.m_status().send())
-      println("stdOut: " + workOrder.m_stdout().send())
-      println("stdErr: " + workOrder.m_stderr().send())
-      println("uri: " + workOrder.m_uri().send())
+      println("requester: " + workInfo.requester)
+      println("workerpool: " + workInfo.workerpool)
+      println("status: " + workInfo.status)
+      println("stdOut: " + workInfo.stdOut)
+      println("stdErr: " + workInfo.stdErr)
+      println("uri: " + workInfo.uri)
 
 
     } catch {
