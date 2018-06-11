@@ -30,6 +30,7 @@ object DemoIExec {
   //  import ec.iex._ // would need to include all the contracts wrapper if not in same package
 
   import ec.iex.core.Account._
+  import ec.iex.core.WorkOrder._
 
   def main(args: Array[String]): Unit = {
 
@@ -56,23 +57,32 @@ object DemoIExec {
       showRlcAllowance(rlc, iexecHub, userWallet)
       showHubBalances(iexecHub, userWallet)
 
-      val factorialAddress = appHub.getApp(userWallet.address.value, BigInteger.valueOf(3)).send()
+      val factorialAddress = "0x0F0921a1101475DF0A4E322aa7886a32B1e15a5C" // can get from getApp() if user's own dapp
       val factorialApp = App.load(factorialAddress, web3.web3j, credentials, gasPrice.bigInteger, gasLimit.bigInteger)
       val appPrice = factorialApp.m_appPrice().send()
 
-      allow(web3, userWallet, credentials, rlc, Address(iexecHub.getContractAddress))(appPrice.intValue())
-      depositToHub(iexecHub, appPrice.intValue())
+      //allow(web3, userWallet, credentials, rlc, Address(iexecHub.getContractAddress))(appPrice.intValue())
+      //depositToHub(iexecHub, appPrice.intValue())
 
-      val workerPoolId = 245
-      val workPoolAddress = "0x851f65b27030ac9634bf514ffbc3c1369ed747e9"
+      val workerPoolId = 310 // pool ID
+      val workPoolAddress = "0x82190e18f7cE7CB9d39128707f58D19C649CF9C2" // pool address
+      val params = "{\"cmdline\":\"10\"}" // dapp params
 
-      val txHash = iexecHub.buyForWorkOrder(BigInteger.valueOf(workerPoolId), workPoolAddress, factorialAddress, "0", "10", userWallet.address.value, userWallet.address.value).send()
-
-      println(txHash)
-
-      val workId = txHash.getLogs().get(1).getTopics().get(1).replace("0x", "").replaceFirst("^0+(?!$)", "")
+      val workId = buyWorkOrder(iexecHub, workerPoolId, workPoolAddress, factorialAddress, "0", params, userWallet.address.value, userWallet.address.value)
 
       println("workId: " + workId)
+
+      Thread.sleep(20000) // allow time for WorkOrder contract to be created
+
+      val workOrder = WorkOrder.load(workId, web3.web3j, credentials, gasPrice.bigInteger, gasLimit.bigInteger)
+
+      println("requester: " + workOrder.m_requester().send())
+      println("workerpool: " + workOrder.m_workerpool().send())
+      println("status: " + workOrder.m_status().send())
+      println("stdOut: " + workOrder.m_stdout().send())
+      println("stdErr: " + workOrder.m_stderr().send())
+      println("uri: " + workOrder.m_uri().send())
+
 
     } catch {
       case e: Throwable ⇒
