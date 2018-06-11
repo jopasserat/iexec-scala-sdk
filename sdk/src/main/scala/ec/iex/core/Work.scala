@@ -22,6 +22,10 @@ case class WorkInfo(
   stdErr: String,
   uri: String)
 
+object WorkState extends Enumeration {
+  val UNSET, ACTIVE, REVEALING, CLAIMED, COMPLETED = Value
+}
+
 object Work {
 
   def buyWorkOrder(iexecHubContract: IexecHub, workerPoolId: Int, workerPoolAddress: String, appAddress: String, datasetAddress: String, parameters: String, callbackAddress: String, beneficiaryAddress: String) = {
@@ -51,6 +55,18 @@ object Work {
       workInfo.m_stderr().send(),
       workInfo.m_uri().send()
     )
+  }
+
+  def translateStatus(statusID: Int) = {
+    val status = statusID match {
+      case 0 => WorkState.UNSET
+      case 1 => WorkState.ACTIVE
+      case 2 => WorkState.REVEALING
+      case 3 => WorkState.CLAIMED
+      case 4 => WorkState.COMPLETED
+    }
+
+    status
   }
 
 }
