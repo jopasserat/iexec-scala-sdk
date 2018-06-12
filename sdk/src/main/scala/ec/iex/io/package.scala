@@ -21,6 +21,8 @@ package object io {
 
   import org.web3j.crypto.RawTransaction
   import org.web3j.protocol.core.methods.response.TransactionReceipt
+  import ec.iex.core._
+  import ec.iex.core.Work.translateStatus
   import util.int2BigInt
 
   def format(tx: RawTransaction): String =
@@ -52,6 +54,23 @@ package object io {
        |  Transaction hash        = ${tx.getTransactionHash}
        |  Transaction index       = ${tx.getTransactionIndex}
        |  Raw transaction index   = ${tx.getTransactionIndexRaw}
+       |""".stripMargin
+
+  def format(work: WorkInfo): String =
+    s"""Work info:
+       |  Market Order ID = ${work.marketOrderId}
+       |  Requester       = ${work.requester}
+       |  App             = ${work.app}
+       |  Status          = ${translateStatus(work.status.intValue())}
+       |  Dataset         = ${work.dataset}
+       |  Worker pool     = ${work.workerpool}
+       |  Emit cost       = ${work.emitCost}
+       |  Parameters      = ${work.params}
+       |  Callback        = ${work.callback}
+       |  Beneficiary     = ${work.beneficiary}
+       |  StdOut          = ${work.stdOut}
+       |  StdErr          = ${work.stdErr}
+       |  Uri             = ${work.uri}
        |""".stripMargin
 
 }

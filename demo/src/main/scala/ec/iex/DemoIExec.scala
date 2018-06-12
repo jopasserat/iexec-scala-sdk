@@ -76,14 +76,8 @@ object DemoIExec {
 
       val workInfo = getWorkOrder(web3, workId, credentials, gasPrice.bigInteger, gasLimit.bigInteger)
 
-      println("requester: " + workInfo.requester)
-      println("workerpool: " + workInfo.workerpool)
-      println("status: " + translateStatus(workInfo.status.intValue()))
-      println("stdOut: " + workInfo.stdOut)
-      println("stdErr: " + workInfo.stdErr)
-      println("uri: " + workInfo.uri)
-
-
+      println(io.format(workInfo))
+      
     } catch {
       case e: Throwable ⇒
         System.err.println(e.getMessage)
