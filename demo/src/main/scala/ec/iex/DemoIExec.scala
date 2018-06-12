@@ -20,7 +20,7 @@ package ec.iex
 import java.math.BigInteger
 
 import org.web3j.protocol.Web3j
-import com.micronautics.web3j.Cmd.{isMac, isWindows}
+import com.micronautics.web3j.Cmd.{ isMac, isWindows }
 
 object DemoIExec {
 
@@ -82,7 +82,6 @@ object DemoIExec {
       println("stdOut: " + workInfo.stdOut)
       println("stdErr: " + workInfo.stdErr)
       println("uri: " + workInfo.uri)
-
 
     } catch {
       case e: Throwable ⇒

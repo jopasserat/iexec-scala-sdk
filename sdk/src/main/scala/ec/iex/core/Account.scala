@@ -59,7 +59,6 @@ object Account {
     println("RLC allowance: " + rlcContract.allowance(wallet.address.value, iexecHubContract.getContractAddress).send())
   }
 
-
   def showHubBalances(iexecHubContract: IexecHub, wallet: UserWallet) = {
     // get staked and locked balances on iexec hub
     val stakedAndLockedBalances = iexecHubContract.checkBalance(wallet.address.value).send()
@@ -97,7 +96,7 @@ object Account {
     val iexecHubAddress = IexecHub.getPreviouslyDeployedAddress(KOVAN_ID)
 
     val appHub = AppHub.load(appHubAddress, web3j, credentials, gasPrice, gasLimit)
-    val rlc  = RLC.load(rlcAddress, web3j, credentials, gasPrice, gasLimit)
+    val rlc = RLC.load(rlcAddress, web3j, credentials, gasPrice, gasLimit)
     val iexecHub = IexecHub.load(iexecHubAddress, web3j, credentials, gasPrice, gasLimit)
 
     (appHub, rlc, iexecHub)

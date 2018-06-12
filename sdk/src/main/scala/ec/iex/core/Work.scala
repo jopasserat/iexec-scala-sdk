@@ -53,8 +53,7 @@ object Work {
       workInfo.m_beneficiary().send(),
       workInfo.m_stdout().send(),
       workInfo.m_stderr().send(),
-      workInfo.m_uri().send()
-    )
+      workInfo.m_uri().send())
   }
 
   def translateStatus(statusID: Int) = {
