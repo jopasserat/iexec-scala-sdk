@@ -38,10 +38,10 @@ object DemoIExec {
       // TODO how to get that from web3.accounts?
       val walletDir: String = Cmd.home(
         if (isWindows) s"${sys.props("user.home")}\\AppData\\Roaming\\Ethereum\\"
-        else if (isMac) "/Users/Karow/Library/Application Support/io.parity.ethereum/keys/kovan/"
+        else if (isMac) "/Users/Karow/Library/Application Support/io.parity.ethereum/keys/kovan/UTC--2018-06-06T17-46-09.866851332Z--2a20738dc9cf69271c806333fa84d0fa30087dd2.json"
         else "/home/foo/.ethereum/ropsten/keystore/wallet")
 
-      val (credentials, userWallet) = loadWallet(walletDir, "XXX")
+      val (credentials, userWallet) = loadWallet(walletDir, "kovan")
 
       val web3j: Web3j = Web3JScala.fromHttp() // defaults to http://localhost:8545/
       val web3JScala = new Web3JScala(web3j)
@@ -64,8 +64,8 @@ object DemoIExec {
       //allow(web3, userWallet, credentials, rlc, Address(iexecHub.getContractAddress))(appPrice.intValue())
       //depositToHub(iexecHub, appPrice.intValue())
 
-      val workerPoolId = 311 // pool ID
-      val workPoolAddress = "0x4899295937f3F7eEe4be1D2AD658788c6c9272B6" // pool address
+      val workerPoolId = 312 // pool ID
+      val workPoolAddress = "0x851f65b27030Ac9634BF514FfBC3C1369ED747e9" // pool address
       val params = "{\"cmdline\":\"10\"}" // dapp params
 
       val workId = buyWorkOrder(iexecHub, workerPoolId, workPoolAddress, factorialAddress, "0", params, userWallet.address.value, userWallet.address.value)
@@ -77,7 +77,7 @@ object DemoIExec {
       val workInfo = getWorkOrder(web3, workId, credentials, gasPrice.bigInteger, gasLimit.bigInteger)
 
       println(io.format(workInfo))
-      
+
     } catch {
       case e: Throwable ⇒
         System.err.println(e.getMessage)
