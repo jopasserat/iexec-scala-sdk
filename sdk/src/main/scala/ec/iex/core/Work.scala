@@ -53,20 +53,16 @@ object Work {
       workInfo.m_beneficiary().send(),
       workInfo.m_stdout().send(),
       workInfo.m_stderr().send(),
-      workInfo.m_uri().send()
-    )
+      workInfo.m_uri().send())
   }
 
-  def translateStatus(statusID: Int) = {
-    val status = statusID match {
-      case 0 => WorkState.UNSET
-      case 1 => WorkState.ACTIVE
-      case 2 => WorkState.REVEALING
-      case 3 => WorkState.CLAIMED
-      case 4 => WorkState.COMPLETED
+  def translateStatus(statusID: Int) =
+    statusID match {
+      case 0 ⇒ WorkState.UNSET
+      case 1 ⇒ WorkState.ACTIVE
+      case 2 ⇒ WorkState.REVEALING
+      case 3 ⇒ WorkState.CLAIMED
+      case 4 ⇒ WorkState.COMPLETED
     }
-
-    status
-  }
 
 }
