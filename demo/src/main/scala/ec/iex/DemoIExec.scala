@@ -38,10 +38,10 @@ object DemoIExec {
       // TODO how to get that from web3.accounts?
       val walletDir: String = Cmd.home(
         if (isWindows) s"${sys.props("user.home")}\\AppData\\Roaming\\Ethereum\\"
-        else if (isMac) "/Users/Karow/Library/Application Support/io.parity.ethereum/keys/kovan/UTC--2018-06-06T17-46-09.866851332Z--2a20738dc9cf69271c806333fa84d0fa30087dd2.json"
+        else if (isMac) "/Users/Karow/Library/Application Support/io.parity.ethereum/keys/kovan/"
         else "/home/foo/.ethereum/ropsten/keystore/wallet")
 
-      val (credentials, userWallet) = loadWallet(walletDir, "kovan")
+      val (credentials, userWallet) = loadWallet(walletDir, "XXX")
 
       val web3j: Web3j = Web3JScala.fromHttp() // defaults to http://localhost:8545/
       val web3JScala = new Web3JScala(web3j)
