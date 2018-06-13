@@ -74,7 +74,7 @@ object DemoIExec {
 
       Thread.sleep(20000) // allow time for WorkOrder contract to be created
 
-      val workInfo = getWorkOrder(web3, workId, credentials, gasPrice.bigInteger, gasLimit.bigInteger)
+      val workInfo = waitUntilCompleted(web3, workId, credentials, gasPrice.bigInteger, gasLimit.bigInteger)
 
       println(io.format(workInfo))
 

@@ -56,6 +56,16 @@ object Work {
       workInfo.m_uri().send())
   }
 
+  def waitUntilCompleted(web3: EthereumSynchronous, workId: String, credentials: Credentials, gasPrice: BigInteger, gasLimit: BigInteger) = {
+    val workInfo = WorkOrder.load(workId, web3.web3j, credentials, gasPrice, gasLimit)
+
+    while (workInfo.m_status() != 4) {
+      Thread.sleep(10000)
+    }
+
+    getWorkOrder(web3, workId, credentials, gasPrice, gasLimit)
+  }
+
   def translateStatus(statusID: Int) =
     statusID match {
       case 0 ⇒ WorkState.UNSET
