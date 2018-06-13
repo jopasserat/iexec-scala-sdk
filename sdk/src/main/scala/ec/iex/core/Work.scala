@@ -60,7 +60,7 @@ object Work {
     val workInfo = WorkOrder.load(workId, web3.web3j, credentials, gasPrice, gasLimit)
 
     while (workInfo.m_status() != 4) {
-      Thread.sleep(10000)
+      Thread.sleep(5000)
     }
 
     getWorkOrder(web3, workId, credentials, gasPrice, gasLimit)
