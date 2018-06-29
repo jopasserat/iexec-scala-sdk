@@ -48,7 +48,6 @@ object DemoIExec {
       val web3 = web3JScala.sync // CAREFUL!! impactful choice with all subsequent calls going through this proxy being synchronous!
 
       val gasPrice = web3.gasPrice.asWei
-      //val gasLimit = Ether.fromWei(452250)
       val gasLimit = Ether.fromWei(1000000)
 
       val (appHub, rlc, iexecHub) = loadContracts(web3, credentials)(gasPrice.bigInteger, gasLimit.bigInteger)
@@ -61,6 +60,7 @@ object DemoIExec {
       val factorialApp = App.load(factorialAddress, web3.web3j, credentials, gasPrice.bigInteger, gasLimit.bigInteger)
       val appPrice = factorialApp.m_appPrice().send()
 
+      // the two lines below approve the iexec hub contract and deposit to it respectively
       //allow(web3, userWallet, credentials, rlc, Address(iexecHub.getContractAddress))(appPrice.intValue())
       //depositToHub(iexecHub, appPrice.intValue())
 
