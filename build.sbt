@@ -3,14 +3,38 @@ import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
 import scalariform.formatter.preferences._
 import com.typesafe.sbt.SbtScalariform.ScalariformKeys
 
-organization := "ec.iex"
+organization in ThisBuild := "fr.iscpif"
 
 name := "iexec-scala-sdk"
 
 scalaVersion := "2.12.6"
 
-// If you want to apply a license, such as the Apache 2 license, uncomment the following:
-licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html"))
+pomIncludeRepository in ThisBuild := { _ => false}
+scmInfo in ThisBuild := Some(ScmInfo(url("https://github.com/jopasserat/iexec-scala-sdk.git"), "scm:git:git@github.com:jopasserat/iexec-scala-sdk.git"))
+
+pomExtra in ThisBuild := {
+  <!-- Developer contact information -->
+    <developers>
+      <developer>
+        <id>romainreuillon</id>
+        <name>Romain Reuillon</name>
+        <url>https://github.com/romainreuillon/</url>
+      </developer>
+      <developer>
+        <id>jopasserat</id>
+        <name>Jonathan Passerat-Palmbach</name>
+        <url>https://github.com/jopasserat/</url>
+      </developer>
+    </developers>
+}
+
+licenses in ThisBuild := Seq("GPL-3.0" -> url("http://www.gnu.org/licenses/"))
+homepage in ThisBuild := Some(url("https://github.com/jopasserat/iexec-scala-sdk"))
+
+publishTo in ThisBuild := {
+  val nexus = "https://oss.sonatype.org/"
+  if (isSnapshot.value) Some("snapshots" at nexus + "content/repositories/snapshots")
+  else Some("releases" at nexus + "service/local/staging/deploy/maven2")}
 
 pomIncludeRepository in ThisBuild := { _ => false}
 scmInfo in ThisBuild := Some(ScmInfo(url("https://github.com/jopasserat/iexec-scala-sdk.git"), "scm:git:git@github.com:jopasserat/iexec-scala-sdk.git"))
@@ -32,6 +56,28 @@ pomExtra in ThisBuild := {
 }
 
 
+releaseVersionBump := sbtrelease.Version.Bump.Minor
+
+releaseTagComment    := s"Releasing ${(version in ThisBuild).value}"
+
+releaseCommitMessage := s"Bump version to ${(version in ThisBuild).value}"
+
+sonatypeProfileName := "fr.iscpif"
+
+releaseProcess := Seq[ReleaseStep](
+  checkSnapshotDependencies,
+  inquireVersions,
+  runClean,
+  runTest,
+  setReleaseVersion,
+  tagRelease,
+  releaseStepCommand("publishSigned"),
+  setNextVersion,
+  commitNextVersion,
+  releaseStepCommand("sonatypeReleaseAll"),
+  pushChanges
+)
+
 lazy val defaultSettings =
     scalariformSettings(autoformat = true) ++ Seq(
   ScalariformKeys.preferences :=
@@ -39,11 +85,8 @@ lazy val defaultSettings =
       .setPreference(AlignSingleLineCaseStatements, true)
       .setPreference(RewriteArrowSymbols, true),
 
-  organization := "ec.iex",
-
   shellPrompt := { s => Project.extract(s).currentProject.id + " > " }
 )
-
 
 scalacOptions ++= Seq( // From https://tpolecat.github.io/2017/04/25/scalac-flags.html
 //lazy val compilerOptions ++= Seq( // From https://tpolecat.github.io/2017/04/25/scalac-flags.html
