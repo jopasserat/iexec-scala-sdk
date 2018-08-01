@@ -59,7 +59,7 @@ public class Factorial extends Contract {
         _addresses = new HashMap<String, String>();
         _addresses.put("3", "0xd2b9d3ecc76b6d43277fd986afdb8b79685d4d1a");
         _addresses.put("4", "0x392ea5ebbe94ce8fac71720bf8b7a37301341fe2");
-        _addresses.put("42", "0x0cca8579d3527a16e5abfc633c60b02ebc62a28c");
+        _addresses.put("42", "0x0F0921a1101475DF0A4E322aa7886a32B1e15a5C");
     }
 
     protected Factorial(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {
