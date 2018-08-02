@@ -28,6 +28,8 @@ case class UserWallet(
   publicKey: BigInteger,
   address: Address)
 
+case class Balance(staked: BigInteger, locked: BigInteger)
+
 object Account {
 
   /**
@@ -49,20 +51,15 @@ object Account {
     unsignedTx
   }
 
-  def showRlcBalance(rlcContract: RLC, wallet: UserWallet) = {
-    // get RLC balance of wallet
-    println("RLC balance: " + rlcContract.balanceOf(wallet.address.value).send())
-  }
+  def rlcBalance(rlcContract: RLC, wallet: UserWallet) =
+    rlcContract.balanceOf(wallet.address.value).send()
 
-  def showRlcAllowance(rlcContract: RLC, iexecHubContract: IexecHub, wallet: UserWallet) = {
-    // get RLC balance of wallet
-    println("RLC allowance: " + rlcContract.allowance(wallet.address.value, iexecHubContract.getContractAddress).send())
-  }
+  def rlcAllowance(rlcContract: RLC, iexecHubContract: IexecHub, wallet: UserWallet) =
+    rlcContract.allowance(wallet.address.value, iexecHubContract.getContractAddress).send()
 
   def showHubBalances(iexecHubContract: IexecHub, wallet: UserWallet) = {
-    // get staked and locked balances on iexec hub
-    val stakedAndLockedBalances = iexecHubContract.checkBalance(wallet.address.value).send()
-    println("Balance staked: " + stakedAndLockedBalances.getValue1 + "\n" + "Balance locked: " + stakedAndLockedBalances.getValue2)
+    val balances = iexecHubContract.checkBalance(wallet.address.value).send()
+    Balance(balances.getValue1, balances.getValue2)
   }
 
   def withdrawFromHub(iexecHubContract: IexecHub, amount: Int) = {
