@@ -57,17 +57,17 @@ object Account {
   def rlcAllowance(rlcContract: RLC, iexecHubContract: IexecHub, wallet: UserWallet) =
     rlcContract.allowance(wallet.address.value, iexecHubContract.getContractAddress).send()
 
-  def showHubBalances(iexecHubContract: IexecHub, wallet: UserWallet) = {
+  def hubBalances(iexecHubContract: IexecHub, wallet: UserWallet) = {
     val balances = iexecHubContract.checkBalance(wallet.address.value).send()
     Balance(balances.getValue1, balances.getValue2)
   }
 
-  def withdrawFromHub(iexecHubContract: IexecHub, amount: Int) = {
+  def withdrawFromHub(iexecHubContract: IexecHub, amount: BigInteger) = {
     // withdraw amount from iexec hub
     iexecHubContract.withdraw(amount).send()
   }
 
-  def depositToHub(iexecHubContract: IexecHub, amount: Int) = {
+  def depositToHub(iexecHubContract: IexecHub, amount: BigInteger) = {
     // deposit amount to iexec hub
     iexecHubContract.deposit(amount).send()
   }

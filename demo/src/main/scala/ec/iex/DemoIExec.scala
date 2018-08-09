@@ -22,6 +22,7 @@ import java.math.BigInteger
 import org.web3j.protocol.Web3j
 import com.micronautics.web3j.Cmd.{ isMac, isWindows }
 import ec.iex.core.Balance
+import ec.iex.util._
 
 object DemoIExec {
 
@@ -55,7 +56,7 @@ object DemoIExec {
 
       println(s"RLC balance: ${rlcBalance(rlc, userWallet)}")
       println(s"RLC allowance: ${rlcAllowance(rlc, iexecHub, userWallet)}")
-      val Balance(stakedBalance, lockedBalance) = showHubBalances(iexecHub, userWallet)
+      val Balance(stakedBalance, lockedBalance) = hubBalances(iexecHub, userWallet)
       println(s"Balance staked: $stakedBalance\nBalance locked: $lockedBalance")
 
       val factorialAddress = "0x0F0921a1101475DF0A4E322aa7886a32B1e15a5C" // can get from getApp() if user's own dapp
