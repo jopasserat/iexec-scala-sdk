@@ -52,7 +52,7 @@ object DemoIExec {
       val gasPrice = web3.gasPrice.asWei
       val gasLimit = Ether.fromWei(1000000)
 
-      val (appHub, rlc, iexecHub) = loadContracts(web3, credentials)(gasPrice.bigInteger, gasLimit.bigInteger)
+      val (appHub, rlc, iexecHub, marketPlace) = loadContracts(web3, credentials)(gasPrice.bigInteger, gasLimit.bigInteger)
 
       println(s"RLC balance: ${rlcBalance(rlc, userWallet)}")
       println(s"RLC allowance: ${rlcAllowance(rlc, iexecHub, userWallet)}")
