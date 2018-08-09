@@ -168,8 +168,22 @@ lazy val web3jScalaSettings = Seq(
   resolvers ++= ethResolvers
 )
 
+lazy val sttpVersion = "1.3.0-RC5"
+lazy val sttpDependencies =     Seq (
+  "com.softwaremill.sttp" %% "core",
+"com.softwaremill.sttp" %% "akka-http-backend",
+"com.softwaremill.sttp" %% "circe",
+).map(_ % sttpVersion)
 
-lazy val sdk = Project(id = "sdk", base = file("sdk")) settings(defaultSettings ++ web3jScalaSettings : _*)
+lazy val circeVersion = "0.9.1"
+lazy val circeDependencies = Seq(
+  "io.circe" %% "circe-generic",
+  "io.circe" %% "circe-generic-extras"
+).map(_ % circeVersion)
+
+lazy val sdk = Project(id = "sdk", base = file("sdk")) settings(defaultSettings ++ web3jScalaSettings : _*) settings (
+  libraryDependencies ++= (sttpDependencies ++ circeDependencies)
+)
 
 lazy val demo = Project(id = "demo", base = file("demo")) settings(defaultSettings ++ web3jScalaSettings : _*) dependsOn sdk
 
