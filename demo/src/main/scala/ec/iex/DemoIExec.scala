@@ -33,6 +33,7 @@ object DemoIExec {
 
   import ec.iex.core.Account._
   import ec.iex.core.Work._
+  import ec.iex.core.Market
 
   def main(args: Array[String]): Unit = {
 
@@ -75,7 +76,7 @@ object DemoIExec {
       //      val workPoolAddress = "0x851f65b27030Ac9634BF514FfBC3C1369ED747e9" // pool address
       val params = "{\"cmdline\":\"12\"}" // dapp params
 
-      val workId = buyWorkOrder(iexecHub, workerPoolId, workPoolAddress, vanitiyGenAddress, "0", params, userWallet.address.value, userWallet.address.value)
+      Market.getMarketOrders().getOrElse(List.empty).foreach(println)
 
       println("workId: " + workId)
 

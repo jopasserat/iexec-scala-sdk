@@ -79,12 +79,17 @@ object Market {
 
     implicit val backend = HttpURLConnectionBackend()
     val response = request.response(asJson[OrderbookResponse]).send()
-    val r = response
+
+    val res = for {
+      // TODO add an extra flatMap when switching form Id to another container
+      eitherR ← response.body
+      orderBookResponse ← eitherR
+    } yield orderBookResponse.orders
 
     // TODO handle connection lifetime properly https://sttp.readthedocs.io/en/latest/backends/start_stop.html
     backend.close()
 
-    r
+    res
   }
 
 }
