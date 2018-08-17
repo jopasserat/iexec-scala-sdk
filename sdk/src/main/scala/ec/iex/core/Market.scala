@@ -92,4 +92,18 @@ object Market {
     res
   }
 
+  type SttpError = java.io.Serializable
+  type OrderBook[S[_] <: Seq[_]] = Either[SttpError, S[MarketOrder]]
+  type OrderBookList = OrderBook[List]
+
+  def mergeOrderBooks(orderBooks: List[OrderBookList]): Either[SttpError, List[MarketOrder]] = {
+
+    import cats.implicits._ // sequence
+
+    val orders = orderBooks.sequence
+    orders.map(_.flatten)
+  }
+
+  def sortMarketOrders(orderBook: List[MarketOrder]) = orderBook.sortBy(order ⇒ (order.category, order.value))
+
 }

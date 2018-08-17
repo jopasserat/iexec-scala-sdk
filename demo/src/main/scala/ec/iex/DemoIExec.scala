@@ -76,11 +76,14 @@ object DemoIExec {
       //      val workPoolAddress = "0x851f65b27030Ac9634BF514FfBC3C1369ED747e9" // pool address
       val params = "{\"cmdline\":\"12\"}" // dapp params
 
-      Market.getMarketOrders().getOrElse(List.empty).foreach(println)
+      val categories = (1 to 5).toList
+      val orderBooks = for (category ← categories) yield Market.getMarketOrders(category)
 
-      println("workId: " + workId)
+      val mergedOrdersBook = Market.mergeOrderBooks(orderBooks)
+      mergedOrdersBook.getOrElse(List.empty).foreach(println)
 
-      Thread.sleep(20000) // allow time for WorkOrder contract to be created
+      val sortedOrdersBook = mergedOrdersBook.map(Market.sortMarketOrders)
+      sortedOrdersBook.getOrElse(List.empty).foreach(println)
 
       val workInfo = waitUntilCompleted(web3, workId, credentials, gasPrice.bigInteger, gasLimit.bigInteger)
 
