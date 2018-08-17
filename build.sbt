@@ -88,7 +88,7 @@ lazy val defaultSettings =
   shellPrompt := { s => Project.extract(s).currentProject.id + " > " }
 )
 
-scalacOptions ++= Seq( // From https://tpolecat.github.io/2017/04/25/scalac-flags.html
+scalacOptions in ThisBuild ++= Seq( // From https://tpolecat.github.io/2017/04/25/scalac-flags.html
 //lazy val compilerOptions ++= Seq( // From https://tpolecat.github.io/2017/04/25/scalac-flags.html
   "-deprecation",                      // Emit warning and location for usages of deprecated APIs.
   "-encoding", "utf-8",                // Specify character encoding used by source files.
