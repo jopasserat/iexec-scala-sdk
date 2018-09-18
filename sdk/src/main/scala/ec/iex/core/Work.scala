@@ -2,7 +2,7 @@ package ec.iex.core
 
 import java.math.BigInteger
 
-import com.micronautics.web3j.EthereumSynchronous
+import com.micronautics.web3j.{ Address, EthereumSynchronous }
 import ec.iex.IexecHub
 import ec.iex.WorkOrder
 import org.web3j.crypto.Credentials
@@ -30,10 +30,11 @@ object Work {
 
   import ec.iex.util._
 
-  def buyWorkOrder(iexecHubContract: IexecHub, workerPoolId: Int, workerPoolAddress: String, appAddress: String, datasetAddress: String, parameters: String, callbackAddress: String, beneficiaryAddress: String) = {
+  def buyWorkOrder(iexecHubContract: IexecHub)(marketOrderId: BigInt, workerPoolAddress: Address, appAddress: Address, datasetAddress: Address, parameters: String, callbackAddress: Address, beneficiaryAddress: Address): String = {
 
-    val txReceipt = iexecHubContract.buyForWorkOrder(workerPoolId, workerPoolAddress, appAddress, datasetAddress, parameters, callbackAddress, beneficiaryAddress).send()
+    val txReceipt = iexecHubContract.buyForWorkOrder(marketOrderId, workerPoolAddress.value, appAddress.value, datasetAddress.value, parameters, callbackAddress.value, beneficiaryAddress.value).send()
 
+    // TODO breakdown
     val workId = "0x" + txReceipt.getLogs().get(1).getTopics().get(1).replace("0x", "").replaceFirst("^0+(?!$)", "")
 
     workId
