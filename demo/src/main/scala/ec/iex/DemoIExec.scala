@@ -62,19 +62,16 @@ object DemoIExec {
 
       //      val factorialAddress = "0x0F0921a1101475DF0A4E322aa7886a32B1e15a5C" // can get from getApp() if user's own dapp
       //      val factorialAddress = Factorial.getPreviouslyDeployedAddress("42")
-      val vanitiyGenAddress = "0x2bcc53b7d48718d70cfc8b08ea986ce761ab5e0c" // FIXME this is actually vanity Gen's address
-      val factorialApp = App.load(vanitiyGenAddress, web3.web3j, credentials, gasPrice.bigInteger, gasLimit.bigInteger)
-      val appPrice = factorialApp.m_appPrice().send()
+      val vanitiyGenAddress = Address("0x2bcc53b7d48718d70cfc8b08ea986ce761ab5e0c")
+      val vanityGenApp = App.load(vanitiyGenAddress.value, web3.web3j, credentials, gasPrice.bigInteger, gasLimit.bigInteger)
+      val appPrice = vanityGenApp.m_appPrice().send()
 
       // the two lines below approve the iexec hub contract and deposit to it respectively
       //allow(web3, userWallet, credentials, rlc, Address(iexecHub.getContractAddress))(appPrice.intValue())
       //depositToHub(iexecHub, appPrice.intValue())
 
-      val workerPoolId = 502
-      val workPoolAddress = "0x851f65b27030Ac9634BF514FfBC3C1369ED747e9"
-      //       val workerPoolId = 312 // pool ID
-      //      val workPoolAddress = "0x851f65b27030Ac9634BF514FfBC3C1369ED747e9" // pool address
-      val params = "{\"cmdline\":\"12\"}" // dapp params
+      val params = "{\"cmdline\":\"1iEx\"}" // dapp params
+      val UNUSED_PARAMETER = Address("0")
 
       val categories = (1 to 5).toList
       val orderBooks = for (category ← categories) yield Market.getMarketOrders(category)
