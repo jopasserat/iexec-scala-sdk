@@ -82,9 +82,24 @@ object DemoIExec {
       val sortedOrdersBook = mergedOrdersBook.map(Market.sortMarketOrders)
       sortedOrdersBook.getOrElse(List.empty).foreach(println)
 
-      val workInfo = waitUntilCompleted(web3, workId, credentials, gasPrice.bigInteger, gasLimit.bigInteger)
+      for {
+        orders ← sortedOrdersBook.toOption
+        cheapestOrder ← orders.headOption
+      } yield {
 
-      println(io.format(workInfo))
+        val marketOrderId = cheapestOrder.marketorderIdx
+        val workerPoolAddress = cheapestOrder.workerpool
+
+        val workId = buyWorkOrder(iexecHub)(marketOrderId, workerPoolAddress, vanitiyGenAddress, UNUSED_PARAMETER, params, UNUSED_PARAMETER, UNUSED_PARAMETER)
+
+        println("workId: " + workId)
+
+        Thread.sleep(20000)
+
+        val workInfo = waitUntilCompleted(web3, workId, credentials, gasPrice.bigInteger, gasLimit.bigInteger)
+
+        println(io.format(workInfo))
+      }
 
     } catch {
       case e: Throwable ⇒
