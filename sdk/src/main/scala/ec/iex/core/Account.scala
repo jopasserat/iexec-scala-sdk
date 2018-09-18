@@ -81,24 +81,4 @@ object Account {
 
     (credentials, userWallet)
   }
-
-  lazy val KOVAN_ID = "42"
-
-  def loadContracts(web3: EthereumSynchronous, credentials: Credentials)(gasPrice: BigInteger, gasLimit: BigInteger) = {
-
-    val web3j = web3.web3j
-
-    val appHubAddress = AppHub.getPreviouslyDeployedAddress(KOVAN_ID)
-    val rlcAddress = RLC.getPreviouslyDeployedAddress(KOVAN_ID)
-    val iexecHubAddress = IexecHub.getPreviouslyDeployedAddress(KOVAN_ID)
-    val marketplaceAddress = Marketplace.getPreviouslyDeployedAddress(KOVAN_ID)
-
-    val appHub = AppHub.load(appHubAddress, web3j, credentials, gasPrice, gasLimit)
-    val rlc = RLC.load(rlcAddress, web3j, credentials, gasPrice, gasLimit)
-    val iexecHub = IexecHub.load(iexecHubAddress, web3j, credentials, gasPrice, gasLimit)
-    val marketplace = Marketplace.load(marketplaceAddress, web3j, credentials, gasPrice, gasLimit)
-
-    (appHub, rlc, iexecHub, marketplace)
-  }
-
 }
