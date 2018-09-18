@@ -27,6 +27,7 @@ package object util {
   import org.web3j.protocol.core.methods.response.TransactionReceipt
 
   implicit def int2BigInt(i: Int): BigInteger = BigInt(i).bigInteger
+  implicit def bigInt2BigInteger(bi: BigInt): BigInteger = bi.bigInteger
 
   // ---------------  begin signAndSendTx -------------------
   def signAndSendTx(web3: EthereumSynchronous, userWallet: UserWallet, credentials: Credentials)(to: Address, unsignedTransaction: TransactionReceipt) = {
