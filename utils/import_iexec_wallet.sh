@@ -9,6 +9,6 @@ awk 'match($0, /"privateKey": "0x(.*)",/, a) {print a[1]}' "${iexec_wallet}" > "
 geth account import --keystore "${tmp_keystore}" "${tmp_priv_key_file}"
 parity account import "${tmp_keystore}" --chain=kovan
 
-#rm "${tmp_priv_key_file}"
+rm "${tmp_priv_key_file}"
 rm -rf "${tmp_keystore}"
 
