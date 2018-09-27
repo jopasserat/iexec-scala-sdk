@@ -160,7 +160,7 @@ lazy val ethResolvers = Seq(
   "micronautics/scala on bintray" at "http://dl.bintray.com/micronautics/scala"
 )
 
-lazy val web3jScalaVersion = "0.2.2"
+lazy val web3jScalaVersion = "0.3.2"
 lazy val web3jScala = "com.micronautics" %% "web3j-scala" % web3jScalaVersion withSources()
 lazy val web3jScalaSettings = Seq(
   unmanagedSourceDirectories in Compile += baseDirectory.value / "src/main/resources/abiWrapper",
@@ -181,9 +181,15 @@ lazy val circeDependencies = Seq(
   "io.circe" %% "circe-generic-extras"
 ).map(_ % circeVersion)
 
+lazy val betterFilesVersion = "3.6.0"
+lazy val betterFiles = "com.github.pathikrit" %% "better-files" % betterFilesVersion
+
+
+//lazy val ethSignTypedData = Project(id = "ethsigntypeddata", base = file("third-party/eth_signTypedData/eth_signtypeddata_java"))
+
 lazy val sdk = Project(id = "sdk", base = file("sdk")) settings(defaultSettings ++ web3jScalaSettings : _*) settings (
-  libraryDependencies ++= (sttpDependencies ++ circeDependencies)
-)
+  libraryDependencies ++= (sttpDependencies ++ circeDependencies :+ betterFiles)
+) //dependsOn ethSignTypedData
 
 lazy val demo = Project(id = "demo", base = file("demo")) settings(defaultSettings ++ web3jScalaSettings : _*) dependsOn sdk
 
