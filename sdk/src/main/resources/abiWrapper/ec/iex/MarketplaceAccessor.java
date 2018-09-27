@@ -18,7 +18,7 @@ import org.web3j.tx.TransactionManager;
  * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the 
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  *
- * <p>Generated with web3j version 3.4.0.
+ * <p>Generated with web3j version 3.5.0.
  */
 public class MarketplaceAccessor extends Contract {
     private static final String BINARY = "0x60606040523415600e57600080fd5b60405160208060a383398101604052808051915050600160a060020a0381161515603757600080fd5b60008054600160a060020a03909216600160a060020a0319928316811790915560018054909216179055603580606e6000396000f3006060604052600080fd00a165627a7a7230582028a3ca0ac1aea21a0b958f8f751e114a59010a5ecd5d2cf0e4151510b0ca61480029";

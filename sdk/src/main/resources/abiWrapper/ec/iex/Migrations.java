@@ -23,7 +23,7 @@ import org.web3j.tx.TransactionManager;
  * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the 
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  *
- * <p>Generated with web3j version 3.4.0.
+ * <p>Generated with web3j version 3.5.0.
  */
 public class Migrations extends Contract {
     private static final String BINARY = "0x6060604052341561000f57600080fd5b60008054600160a060020a033316600160a060020a03199091161790556102318061003b6000396000f3006060604052600436106100615763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416630900f0108114610066578063445df0ac146100945780638da5cb5b146100b9578063fdacd576146100f5575b600080fd5b341561007157600080fd5b61009273ffffffffffffffffffffffffffffffffffffffff6004351661010b565b005b341561009f57600080fd5b6100a76101b6565b60405190815260200160405180910390f35b34156100c457600080fd5b6100cc6101bc565b60405173ffffffffffffffffffffffffffffffffffffffff909116815260200160405180910390f35b341561010057600080fd5b6100926004356101d8565b600080543373ffffffffffffffffffffffffffffffffffffffff908116911614156101b2578190508073ffffffffffffffffffffffffffffffffffffffff1663fdacd5766001546040517c010000000000000000000000000000000000000000000000000000000063ffffffff84160281526004810191909152602401600060405180830381600087803b15156101a157600080fd5b5af115156101ae57600080fd5b5050505b5050565b60015481565b60005473ffffffffffffffffffffffffffffffffffffffff1681565b6000543373ffffffffffffffffffffffffffffffffffffffff908116911614156102025760018190555b505600a165627a7a72305820caa56e9b5581d42b13fc1eb71a3471f8d4597a5bf505905ab933435114cc87c10029";
@@ -40,9 +40,7 @@ public class Migrations extends Contract {
 
     static {
         _addresses = new HashMap<String, String>();
-        _addresses.put("3", "0x922c8fb7b70ff0e42919f623a53887ef31cf4e91");
-        _addresses.put("4", "0x4d4f1096e353b288b7f815a3c0bb878b3e0fa930");
-        _addresses.put("42", "0x9a1eb11bcbc6cf50fda67519568bec2da3f8cad0");
+        _addresses.put("1", "0x016dffb35cf40f8723417e5aa2c0bd7adb8a9a62");
     }
 
     protected Migrations(String contractAddress, Web3j web3j, Credentials credentials, BigInteger gasPrice, BigInteger gasLimit) {

@@ -32,7 +32,7 @@ import rx.functions.Func1;
  * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the 
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  *
- * <p>Generated with web3j version 3.4.0.
+ * <p>Generated with web3j version 3.5.0.
  */
 public class IexecCallbackInterface extends Contract {
     private static final String BINARY = "0x";
@@ -40,7 +40,6 @@ public class IexecCallbackInterface extends Contract {
     public static final String FUNC_WORKORDERCALLBACK = "workOrderCallback";
 
     public static final Event WORKORDERCALLBACK_EVENT = new Event("WorkOrderCallback", 
-            Arrays.<TypeReference<?>>asList(),
             Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}, new TypeReference<Utf8String>() {}, new TypeReference<Utf8String>() {}, new TypeReference<Utf8String>() {}));
     ;
 

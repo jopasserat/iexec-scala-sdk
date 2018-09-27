@@ -18,7 +18,7 @@ import org.web3j.tx.TransactionManager;
  * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the 
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  *
- * <p>Generated with web3j version 3.4.0.
+ * <p>Generated with web3j version 3.5.0.
  */
 public class IexecHubAccessor extends Contract {
     private static final String BINARY = "0x60606040523415600e57600080fd5b604051602080609a83398101604052808051915050600160a060020a0381161515603757600080fd5b60008054600160a060020a03909216600160a060020a031990921691909117905560358060656000396000f3006060604052600080fd00a165627a7a72305820e3add50370a10e6d566788f9b4fe3aaae55052ba1acc894788f4b8d1e0c9622c0029";
