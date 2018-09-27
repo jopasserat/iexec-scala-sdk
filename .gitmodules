@@ -1,0 +1,3 @@
+[submodule "sdk/src/main/resources/PoCo"]
+	path = sdk/src/main/resources/PoCo
+	url = https://github.com/iExecBlockchainComputing/PoCo.git
