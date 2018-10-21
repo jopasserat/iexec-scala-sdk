@@ -160,7 +160,7 @@ lazy val ethResolvers = Seq(
   "micronautics/scala on bintray" at "http://dl.bintray.com/micronautics/scala"
 )
 
-lazy val web3jScalaVersion = "0.3.2"
+lazy val web3jScalaVersion = "0.3.6"
 lazy val web3jScala = "com.micronautics" %% "web3j-scala" % web3jScalaVersion withSources()
 lazy val web3jScalaSettings = Seq(
   unmanagedSourceDirectories in Compile += baseDirectory.value / "src/main/resources/abiWrapper",
