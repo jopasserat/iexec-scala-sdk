@@ -17,18 +17,34 @@
 
 package ec.iex.core
 
-import net.consensys.tools.ethereum.eip712.TypedData
+import java.io.File
+
+import com.micronautics.web3j.{ Address, Signature }
+import com.softwaremill.sttp.HttpURLConnectionBackend
+import ec.iex.util.Network
+import io.circe.Json
+import net.consensys.tools.ethereum.eip712.{ TypedData, TypedDataSignature }
+import org.web3j.crypto.Credentials
 
 object Authentication {
   lazy val AUTH_URL = "https://auth.iex.ec"
 
+  // FIXME should we have a single unified connection backend for all HTTP connections?
+  implicit val backend = HttpURLConnectionBackend()
+
+  case class STypedData(name: String, `type`: String, value: String)
+  case class AuthenticationResponse(ok: Boolean, message: List[STypedData])
+  case class JWTResponse(ok: Boolean, jwtoken: String)
+
+  def sTypedData2TypedData(t: STypedData): TypedData = new TypedData(t.name, t.`type`, t.value)
+  // FIXME might not be the most generic way to decode the Object, but Any doesn't help serialize to JSON...
+  def typedData2STypedData(t: TypedData): STypedData = STypedData(t.getName(), t.getType(), t.getValue().toString)
+
   def getTypedMessage() = {
+
     import com.softwaremill.sttp._
     import com.softwaremill.sttp.circe._
     import io.circe.generic.auto._
-
-    case class STypedData(name: String, `type`: String, value: String)
-    case class AuthenticationResponse(ok: Boolean, message: List[STypedData])
 
     val request = sttp.get(uri"$AUTH_URL/typedmessage")
 
@@ -46,10 +62,6 @@ object Authentication {
       val STypedData(name, _type, value) = sTypedData
       new TypedData(name, _type, value)
     }
-
-    // TODO handle connection lifetime properly https://sttp.readthedocs.io/en/latest/backends/start_stop.html
-    backend.close()
-    res
   }
 
 }
