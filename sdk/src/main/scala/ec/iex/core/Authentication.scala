@@ -54,4 +54,14 @@ object Authentication {
     }
   }
 
+  def getJWTBySignature(messageJSON: Json, address: Address, signature: Signature) = {
+    import com.softwaremill.sttp._
+    import io.circe.generic.auto._
+
+    val request = sttp.get(uri"$AUTH_URL/typedauth?message=${messageJSON.noSpaces}&address=${address.value}&signature=${signature.value}")
+
+    Network.withHTTPSession(request) { response: JWTResponse ⇒
+      response.jwtoken
+    }
+  }
 }
