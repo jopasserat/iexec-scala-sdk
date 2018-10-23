@@ -21,7 +21,7 @@ import java.io.File
 
 import com.micronautics.web3j.{ Address, Signature }
 import com.softwaremill.sttp.HttpURLConnectionBackend
-import ec.iex.util.Network
+import ec.iex.io.Network
 import io.circe.Json
 import net.consensys.tools.ethereum.eip712.{ TypedData, TypedDataSignature }
 import org.web3j.crypto.Credentials
