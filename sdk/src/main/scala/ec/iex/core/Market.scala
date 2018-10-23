@@ -17,6 +17,8 @@
 
 package ec.iex.core
 
+import ec.iex.io.Network
+
 object Market {
 
   import java.time.LocalDateTime
@@ -66,30 +68,18 @@ object Market {
 
     import ec.iex.util.CirceDecoders._
     import com.softwaremill.sttp._
-    import com.softwaremill.sttp.akkahttp._
     import com.softwaremill.sttp.circe._
     import io.circe.generic.auto._
 
-    import scala.concurrent.ExecutionContext.Implicits.global
-
     case class OrderbookResponse(ok: Boolean, orders: List[MarketOrder])
 
-    val request = sttp
-      .get(uri"https://gateway.iex.ec/orderbook?category=$category")
+    val request = sttp.get(uri"https://gateway.iex.ec/orderbook?category=$category")
 
     implicit val backend = HttpURLConnectionBackend()
-    val response = request.response(asJson[OrderbookResponse]).send()
 
-    val res = for {
-      // TODO add an extra flatMap when switching form Id to another container
-      eitherR ← response.body
-      orderBookResponse ← eitherR
-    } yield orderBookResponse.orders
-
-    // TODO handle connection lifetime properly https://sttp.readthedocs.io/en/latest/backends/start_stop.html
-    backend.close()
-
-    res
+    Network.withHTTPSession(request) { response: OrderbookResponse ⇒
+      response.orders
+    }
   }
 
   type SttpError = java.io.Serializable

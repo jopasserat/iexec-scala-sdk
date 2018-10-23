@@ -48,19 +48,9 @@ object Authentication {
 
     val request = sttp.get(uri"$AUTH_URL/typedmessage")
 
-    // FIXME should we have a single unified connection backend for all HTTP connections?
-    implicit val backend = HttpURLConnectionBackend()
-    val response = request.response(asJson[AuthenticationResponse]).send()
-
-    val res = for {
-      // TODO add an extra flatMap when switching from Id to another container
-      eitherR ← response.body
-      authenticationResponse ← eitherR
-      message = authenticationResponse.message.headOption
-      sTypedData ← Either.cond(message.isDefined, message.get, "Could not extract message from authentication challenge")
-    } yield {
-      val STypedData(name, _type, value) = sTypedData
-      new TypedData(name, _type, value)
+    Network.withHTTPSession(request) { response: AuthenticationResponse ⇒
+      val sTypedData = response.message
+      sTypedData.map(sTypedData2TypedData)
     }
   }
 
